@@ -279,25 +279,6 @@ article {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* footer */
 
 footer {
@@ -401,31 +382,6 @@ footer {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @media (max-width: 1350px) {
 
 
@@ -452,10 +408,6 @@ footer {
         font-size: 12px;
         font-weight: 700;
     }
-
-
-
-
 
 
 
@@ -487,14 +439,6 @@ footer {
         height: 196px;
     }
 }
-
-
-
-
-
-
-
-
 
 
 @media (max-width: 1200px) {
@@ -587,4 +531,13 @@ footer {
     .img-text h1 {
         font-size: 16px;
     }
+}
+
+.glow-btn {
+    transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
 }

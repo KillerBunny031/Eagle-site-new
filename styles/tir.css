@@ -237,3 +237,12 @@ footer {
         display: none;
     }
 }
+
+.glow-btn {
+    transition: all 0.3s ease;
+}
+
+.glow-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
+}
