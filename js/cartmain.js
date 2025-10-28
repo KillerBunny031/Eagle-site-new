@@ -1,13 +1,12 @@
-// Объект для хранения корзины
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// Функция проверки кд
+// проверка кд
 function checkCooldown() {
     const lastOrderTime = localStorage.getItem('lastOrderTime');
-    if (!lastOrderTime) return { allowed: true, remaining: 0 }; // Можно отправлять
+    if (!lastOrderTime) return { allowed: true, remaining: 0 }; 
     
     const now = Date.now();
-    const cooldownTime = 30 * 60 * 1000; // 30 минут в миллисекундах
+    const cooldownTime = 30 * 60 * 1000; // время для кд, 30 минут
     const timeSinceLastOrder = now - parseInt(lastOrderTime);
     
     if (timeSinceLastOrder < cooldownTime) {
@@ -17,30 +16,30 @@ function checkCooldown() {
     
     return { allowed: true, remaining: 0 };
 }
-// Флаг блокировки отправки
+//#region блок дс
 const SEND_ORDERS_DISABLED = true;
 
-// Оригинальная функция (если хочешь сохранить)
+
 const originalSendOrder = sendOrderToDiscord;
 
-//#region блок дискорда
+
 sendOrderToDiscord = async function(discordUsername, cartItems, totalAmount) {
     if (SEND_ORDERS_DISABLED) {
         
         showNotification('Заказ сохранен! Отправка заказа временно отключена');
         console.log('Заглушка заказа:', { discordUsername, cartItems, totalAmount });
-        return true; // Корзина очистится
+        return true; 
     }
     
 };
 //#endregion
 
-// Функция установки Cooldown
+// кд
 function setCooldown() {
     localStorage.setItem('lastOrderTime', Date.now().toString());
 }
 
-// Функция получения красивого времени
+
 function getCooldownMessage(minutes) {
     if (minutes === 1) {
         return '1 минуту';
@@ -51,12 +50,12 @@ function getCooldownMessage(minutes) {
     }
 }
 
-// Функция отправки заказа в дискорд
+
 async function sendOrderToDiscord(discordUsername, cartItems, totalAmount) {
     const WEBHOOK_URL = CONFIG.DISCORD_WEBHOOK_URL;
     const ROLE_ID = CONFIG.DISCORD_ROLE_ID;
 
-    // Формируем сообщение с пингом в самом начале
+    // сообщение с заказом
     const orderData = {
         content: `<@&${ROLE_ID}>\n\n🎯 **НОВЫЙ ЗАКАЗ ОТ \`${discordUsername}\`**\n\n` +
                  `**Товары:**\n` +
@@ -75,7 +74,7 @@ async function sendOrderToDiscord(discordUsername, cartItems, totalAmount) {
         });
         
         if (response.ok) {
-            setCooldown(); // Устанавливаем кд после успешной отправки
+            setCooldown(); 
             return true;
         } else {
             const errorText = await response.text();
@@ -88,7 +87,7 @@ async function sendOrderToDiscord(discordUsername, cartItems, totalAmount) {
     }
 }
 
-// Функция добавления в корзину
+
 function addToCart(productName, productPrice, productImage = '') {
     const existingItem = cart.find(item => item.name === productName);
     
@@ -108,7 +107,7 @@ function addToCart(productName, productPrice, productImage = '') {
     showNotification(`${productName} добавлен в корзину!`);
 }
 
-// Функция обновления боковой корзины
+
 function updateCartSidebar() {
     const cartItems = document.querySelector('.cart-items-sidebar');
     const totalAmount = document.querySelector('.total-amount');
@@ -117,30 +116,30 @@ function updateCartSidebar() {
     const cartSidebar = document.getElementById('cartSidebar');
     const discordInput = document.getElementById('discordUsername');
     
-    // Обновляем счетчик
+
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCountBadge.textContent = totalItems;
     
-    // Показываем/скрываем корзину
+
     if (cart.length === 0) {
         cartSidebar.classList.remove('active');
         checkoutBtn.disabled = true;
-        discordInput.value = ''; // Очищаем поле при пустой корзине
+        discordInput.value = ''; 
     } else {
         cartSidebar.classList.add('active');
         
-        // Проверяем кд и валидность Discord
+       
         const cooldownCheck = checkCooldown();
         const discordValid = discordInput.checkValidity();
         
-        // Кнопка активна только если нет кд и Discord валиден
+        
         checkoutBtn.disabled = !discordValid || !cooldownCheck.allowed;
         
-        // Обновляем текст кнопки
+        
         updateCheckoutButtonText(cooldownCheck);
     }
     
-    // Обновляем список товаров
+
     cartItems.innerHTML = '';
     let total = 0;
     
@@ -168,7 +167,7 @@ function updateCartSidebar() {
     totalAmount.textContent = `${total} руб.`;
 }
 
-// Функции для работы с корзиной
+
 function changeQuantity(index, change) {
     cart[index].quantity += change;
     
@@ -192,7 +191,7 @@ function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
-// Функция уведомления
+
 function showNotification(message, isError = false) {
     const notification = document.createElement('div');
     notification.style.cssText = `
@@ -220,12 +219,12 @@ function showNotification(message, isError = false) {
     }, 3000);
 }
 
-// Функция обновления текста кнопки
+
 function updateCheckoutButtonText(cooldownCheck) {
     const checkoutBtn = document.querySelector('.checkout-btn-sidebar');
     
     if (cooldownCheck.allowed) {
-        checkoutBtn.textContent = 'Отправить заказ в Discord';
+        checkoutBtn.textContent = 'Отправить заказ';
         checkoutBtn.classList.remove('cooldown');
         checkoutBtn.title = '';
     } else {
@@ -236,11 +235,11 @@ function updateCheckoutButtonText(cooldownCheck) {
     }
 }
 
-// Инициализация при загрузке страницы
+
 document.addEventListener('DOMContentLoaded', function() {
     updateCartSidebar();
     
-    // Валидация Discord username в реальном времени
+    
     const discordInput = document.getElementById('discordUsername');
     const checkoutBtn = document.querySelector('.checkout-btn-sidebar');
     
@@ -248,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const isValid = this.checkValidity();
         const cooldownCheck = checkCooldown();
         
-        // Обновляем состояние кнопки
+       
         checkoutBtn.disabled = cart.length === 0 || !isValid || !cooldownCheck.allowed;
         
         if (this.value && !isValid) {
@@ -257,28 +256,28 @@ document.addEventListener('DOMContentLoaded', function() {
             this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
         }
         
-        // Обновляем текст кнопки
+  
         updateCheckoutButtonText(cooldownCheck);
     });
     
-    // Обработка отправки заказа
+   
     checkoutBtn.addEventListener('click', async function() {
         if (cart.length === 0) return;
         
         const discordUsername = discordInput.value.trim();
         if (!discordUsername) {
-            showNotification('Введите ваш Discord username', true);
+            showNotification('Введите ваш дискорд', true);
             return;
         }
         
-        // Валидация формата Discord
+     
         const discordRegex = /^[a-zA-Z0-9_]{1,32}(#[0-9]{4})?$/;
         if (!discordRegex.test(discordUsername)) {
-            showNotification('Неверный формат Discord username', true);
+            showNotification('Неверный формат дискорда', true);
             return;
         }
         
-        // Проверяем Cooldown
+   
         const cooldownCheck = checkCooldown();
         if (!cooldownCheck.allowed) {
             const remainingTime = getCooldownMessage(cooldownCheck.remaining);
@@ -286,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Показываем состояние загрузки
+
         const originalText = checkoutBtn.textContent;
         checkoutBtn.textContent = 'Отправка...';
         checkoutBtn.classList.add('loading');
@@ -294,16 +293,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
         
-        // Отправляем заказ в Discord
+
         const success = await sendOrderToDiscord(discordUsername, cart, total);
         
-        // Возвращаем обычное состояние кнопки
+        
         checkoutBtn.classList.remove('loading');
         
         if (success) {
-            showNotification(`Заказ отправлен! Мы свяжемся с вами в Discord (${discordUsername})`);
+            showNotification(`Заказ отправлен! Мы свяжемся с Вами в дискорде (${discordUsername})`);
             
-            // Очищаем корзину после успешной отправки
+            
             cart = [];
             updateCartSidebar();
             saveCartToStorage();
@@ -316,14 +315,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Функция принудительного сброса Cooldown (для тестирования)
-function resetCooldownNiggerEbany() {
-    localStorage.removeItem('lastOrderTime');
-    showNotification('Cooldown сброшен!');
-    updateCartSidebar(); // Обновляем корзину чтобы кнопка обновилась
-}
 
-// Добавляем CSS для анимации
+
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {
@@ -336,5 +329,3 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
-
-// resetCooldownNiggerEbany()
