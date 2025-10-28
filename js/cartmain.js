@@ -191,13 +191,21 @@ function saveCartToStorage() {
     localStorage.setItem('cart', JSON.stringify(cart));
 }
 
+const notification_wrapper = document.createElement('div');
+notification_wrapper.style.cssText = `
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+`;
+document.body.appendChild(notification_wrapper);
 
 function showNotification(message, isError = false) {
     const notification = document.createElement('div');
     notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
         background: ${isError ? '#e74c3c' : '#27ae60'};
         color: white;
         padding: 15px 20px;
@@ -207,10 +215,11 @@ function showNotification(message, isError = false) {
         animation: slideIn 0.3s ease;
         font-weight: 500;
         border-left: 4px solid ${isError ? '#c0392b' : '#229954'};
+        margin-left: auto;
     `;
     notification.textContent = message;
     
-    document.body.appendChild(notification);
+    notification_wrapper.appendChild(notification);
     
     setTimeout(() => {
         if (notification.parentNode) {
