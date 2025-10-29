@@ -363,7 +363,6 @@ main {
 
 /* CSS корзины */ 
 
-/* боковина корзины */
 .cart-sidebar {
     position: fixed;
     top: 50%;
@@ -590,7 +589,7 @@ main {
 .cart-items-sidebar::-webkit-scrollbar-thumb:hover {
     background: rgba(52, 152, 219, 0.8);
 }
-/* стили для поля дискорда */
+
 .discord-input-section {
     padding: 15px 20px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -640,7 +639,7 @@ main {
     line-height: 1.4;
 }
 
-/* кнопка кулдауна */
+
 .checkout-btn-sidebar:disabled {
     background: linear-gradient(135deg, #7f8c8d 0%, #95a5a6 100%) !important;
     cursor: not-allowed !important;
@@ -686,7 +685,7 @@ main {
     margin-bottom: 2px;
 }
 
-/* Плавное появление */
+/* анимации */ 
 .fade-in {
     animation: fadeIn 0.5s ease-in;
 }
@@ -696,7 +695,7 @@ main {
     to { opacity: 1; }
 }
 
-/* Свечение для кнопок */
+
 .glow-btn {
     transition: all 0.3s ease;
 }
@@ -706,7 +705,7 @@ main {
     box-shadow: 0 0 15px rgba(52, 152, 219, 0.5);
 }
 
-/* Поднятие при наведении */
+
 .lift-up {
     transition: transform 0.3s ease;
 }
@@ -715,7 +714,7 @@ main {
     transform: translateY(-3px);
 }
 
-/* Пульсация для важных элементов */
+
 .pulse-slow {
     animation: pulse 3s infinite;
 }
@@ -724,4 +723,20 @@ main {
     0% { transform: scale(1); }
     50% { transform: scale(1.02); }
     100% { transform: scale(1); }
+}
+
+.limit-reached {
+    background-color: #e74c3c !important; 
+    border-color: #e74c3c !important;
+    color: white !important;
+    animation: flash-red 0.5s ease-in-out;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+    cursor: not-allowed;
+}
+
+@keyframes flash-red {
+    0% { transform: scale(1); background-color: #e74c3c; }
+    50% { transform: scale(1.1); background-color: #c0392b; }
+    100% { transform: scale(1); background-color: #e74c3c; }
 }

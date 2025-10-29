@@ -155,10 +155,8 @@ const itemLimit = CART_LIMITS.maxSameItem;
 cart.forEach((item, index) => {
     total += item.price * item.quantity;
     
-    // 💡 1. Логика для определения состояния кнопки
     const isLimitReached = item.quantity >= itemLimit; 
     
-    // 💡 2. Условный класс и атрибут 'disabled'
     const plusButtonClass = isLimitReached ? ' limit-reached' : ''; 
     const plusButtonDisabled = isLimitReached ? ' disabled' : ''; 
 
