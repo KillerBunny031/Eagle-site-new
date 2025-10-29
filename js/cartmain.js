@@ -1,12 +1,14 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
-// проверка кд
+    const CART_LIMITS = {
+    maxSameItem: 10
+};
 function checkCooldown() {
     const lastOrderTime = localStorage.getItem('lastOrderTime');
     if (!lastOrderTime) return { allowed: true, remaining: 0 }; 
     
     const now = Date.now();
-    const cooldownTime = 30 * 60 * 1000; // время для кд, 30 минут
+    const cooldownTime = 30 * 60 * 1000; 
     const timeSinceLastOrder = now - parseInt(lastOrderTime);
     
     if (timeSinceLastOrder < cooldownTime) {
@@ -26,15 +28,15 @@ const originalSendOrder = sendOrderToDiscord;
 sendOrderToDiscord = async function(discordUsername, cartItems, totalAmount) {
     if (SEND_ORDERS_DISABLED) {
         
-        showNotification('Заказ сохранен! Отправка заказа временно отключена');
-        console.log('Заглушка заказа:', { discordUsername, cartItems, totalAmount });
+        showNotification('Заказы временно отключены');
+        console.log('Содержимое заказа:', { discordUsername, cartItems, totalAmount });
         return true; 
     }
     
 };
 //#endregion
 
-// кд
+
 function setCooldown() {
     localStorage.setItem('lastOrderTime', Date.now().toString());
 }
@@ -90,8 +92,13 @@ async function sendOrderToDiscord(discordUsername, cartItems, totalAmount) {
 
 function addToCart(productName, productPrice, productImage = '') {
     const existingItem = cart.find(item => item.name === productName);
-    
+
     if (existingItem) {
+        
+        if (existingItem.quantity >= CART_LIMITS.maxSameItem) {
+            showNotification(`Достигнут лимит в ${CART_LIMITS.maxSameItem} одного товара`, true);
+            return;
+        }
         existingItem.quantity += 1;
     } else {
         cart.push({
@@ -104,7 +111,7 @@ function addToCart(productName, productPrice, productImage = '') {
     
     updateCartSidebar();
     saveCartToStorage();
-    showNotification(`${productName} добавлен в корзину!`);
+    showNotification(`${productName} добавлен в корзину`);
 }
 
 
@@ -143,24 +150,35 @@ function updateCartSidebar() {
     cartItems.innerHTML = '';
     let total = 0;
     
-    cart.forEach((item, index) => {
-        total += item.price * item.quantity;
-        
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item-sidebar';
-        cartItem.innerHTML = `
-            <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.style.display='none'">
-            <div class="cart-item-details">
-                <h4 class="cart-item-name">${item.name}</h4>
-                <p class="cart-item-price">${item.price} руб.</p>
-            </div>
-            <div class="cart-item-controls">
-                <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
-                <span class="cart-item-quantity">${item.quantity}</span>
-                <button class="quantity-btn" onclick="changeQuantity(${index}, 1)">+</button>
-                <button class="remove-item-sidebar" onclick="removeFromCart(${index})">×</button>
-            </div>
-        `;
+const itemLimit = CART_LIMITS.maxSameItem; 
+
+cart.forEach((item, index) => {
+    total += item.price * item.quantity;
+    
+    const isLimitReached = item.quantity >= itemLimit; 
+    
+    const plusButtonClass = isLimitReached ? ' limit-reached' : ''; 
+    const plusButtonDisabled = isLimitReached ? ' disabled' : ''; 
+
+    const onclickAction = isLimitReached 
+        ? `showNotification('Достигнут лимит в ${itemLimit} одного товара', true);` 
+        : `changeQuantity(${index}, 1)`;
+
+    const cartItem = document.createElement('div');
+    cartItem.className = 'cart-item-sidebar';
+    cartItem.innerHTML = `
+        <img src="${item.image}" alt="${item.name}" class="cart-item-image" onerror="this.style.display='none'">
+        <div class="cart-item-details">
+            <h4 class="cart-item-name">${item.name}</h4>
+            <p class="cart-item-price">${item.price} руб.</p>
+        </div>
+        <div class="cart-item-controls">
+            <button class="quantity-btn" onclick="changeQuantity(${index}, -1)">-</button>
+            <span class="cart-item-quantity">${item.quantity}</span>
+            <button class="quantity-btn${plusButtonClass}" onclick="${onclickAction}">+</button>
+            <button class="remove-item-sidebar" onclick="removeFromCart(${index})">×</button>
+        </div>
+    `;
         cartItems.appendChild(cartItem);
     });
     
@@ -169,10 +187,25 @@ function updateCartSidebar() {
 
 
 function changeQuantity(index, change) {
-    cart[index].quantity += change;
+    const currentItem = cart[index];
     
-    if (cart[index].quantity <= 0) {
-        cart.splice(index, 1);
+    if (change > 0) {
+        const newQuantity = currentItem.quantity + change;
+        
+        if (newQuantity > CART_LIMITS.maxSameItem) {
+            showNotification(`Достигнут лимит в ${CART_LIMITS.maxSameItem} одного товара`, true);
+            return;
+        }
+        
+        currentItem.quantity = newQuantity;
+        
+    } else { 
+        
+        currentItem.quantity += change;
+        
+        if (currentItem.quantity <= 0) {
+            cart.splice(index, 1);
+        }
     }
     
     updateCartSidebar();
