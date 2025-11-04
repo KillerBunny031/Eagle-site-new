@@ -18,24 +18,6 @@ function checkCooldown() {
     
     return { allowed: true, remaining: 0 };
 }
-//#region блок дс
-const SEND_ORDERS_DISABLED = true;
-
-
-const originalSendOrder = sendOrderToDiscord;
-
-
-sendOrderToDiscord = async function(discordUsername, cartItems, totalAmount) {
-    if (SEND_ORDERS_DISABLED) {
-        
-        showNotification('Заказы временно отключены');
-        console.log('Содержимое заказа:', { discordUsername, cartItems, totalAmount });
-        return true; 
-    }
-    
-};
-//#endregion
-
 
 function setCooldown() {
     localStorage.setItem('lastOrderTime', Date.now().toString());
