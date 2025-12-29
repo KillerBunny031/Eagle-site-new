@@ -1,7 +1,7 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     const CART_LIMITS = {
-    maxSameItem: 10
+    maxSameItem: 5
 };
 function checkCooldown() {
     const lastOrderTime = localStorage.getItem('lastOrderTime');

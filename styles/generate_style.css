@@ -1,0 +1,104 @@
+/* цвета темы */
+:root {
+  --main-color: #39604B;
+  --bg-color: #FFF6BF;
+  --text-color: #2d2d2d;
+  --white: #fff;
+}
+
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--bg-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  color: var(--text-color);
+}
+
+
+.container {
+  background: var(--white);
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 320px;
+  border-top: 6px solid var(--main-color);
+}
+
+
+h1 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: var(--main-color);
+}
+
+/* поля и подписи */
+.input-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-bottom: 5px;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+input:focus {
+  border-color: var(--main-color);
+  outline: none;
+}
+
+/* кнопка генерации */
+button {
+  width: 100%;
+  padding: 10px;
+  background-color: var(--main-color);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background-color: #2f4d3c;
+}
+
+/* результат */
+.result-box {
+  margin-top: 20px;
+}
+
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  resize: none;
+  font-family: monospace;
+  background-color: #f9f9f9;
+  height: 150px;
+  margin-top: 5px;
+}
+
+/* копировать */
+.copy-btn {
+  background-color: #4b735e;
+  margin-top: 8px;
+}
+
+.copy-btn:hover {
+  background-color: #365646;
+}

@@ -1,0 +1,4 @@
+const CONFIG = {
+    DISCORD_WEBHOOK_URL:'https://discord.com/api/webhooks/1431334084340088984/lJGsoLTlZ5kB4S6IpwEpiEIDLK0xopch5Ssst1cnEI-4lcC-wQ3hQTalISgCv-k2KaDo',
+    DISCORD_ROLE_ID: '939793859863535668'
+};
