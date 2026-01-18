@@ -102,3 +102,16 @@ textarea {
 .copy-btn:hover {
   background-color: #365646;
 }
+
+.back {
+  width: 3%;
+  text-align: center;
+  padding: 10px;
+  background-color: var(--main-color);
+  color: var(--white);
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
