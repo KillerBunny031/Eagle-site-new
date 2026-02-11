@@ -51,7 +51,7 @@
             <main>
                <div class="warning">
                     <span>Картинки товаров могут не совпадать с самим товаром</span>
-                    <span>На данный момент у нас действует политика: 2 оружия на одни руки и 3 пачки патронов на одно оружие (за один заказ)</span>
+                    <span>На данный момент у нас действует политика: 2 оружия на одни руки и 3 пачки патронов на одно оружие (за один заказ - сессию)</span>
                </div>
 
                 <div class="category-container">
@@ -84,7 +84,7 @@
                         <div class="card lift-up fade-in">
                             <div class="card-img"><img src="../images/shop/shopNew/pistols/fiveseven.png" alt=""></div>
                             <h3>FiveSeveN</h3>
-                            <p>16.9000p</p>
+                            <p>16.900p</p>
                             <button class="add glow-btn" onclick="addToCart('FiveSeveN', 16900, '../images/shop/shopNew/pistols/fiveseven.png')">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
@@ -331,7 +331,7 @@
                             <div class="card-img"><img src="../images/shop/mal.png" alt=""></div>
                             <h3>Малый калибр</h3>
                             <p>1.200p</p>
-                            <button class="add glow-btn" onclick="addToCart('Малый калибр', 1200, '../images/shop/mal.png')">
+                            <button class="add glow-btn" onclick="addToCart('Малый калибр', 1200, '../images/shop/mal.png', 6)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -339,7 +339,7 @@
                             <div class="card-img"><img src="../images/shop/krup.png" alt=""></div>
                             <h3>Крупный калибр</h3>
                             <p>2.500p</p>
-                            <button class="add glow-btn" onclick="addToCart('Крупный калибр', 2500, '../images/shop/krup.png')">
+                            <button class="add glow-btn" onclick="addToCart('Крупный калибр', 2500, '../images/shop/krup.png', 6)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -347,7 +347,7 @@
                             <div class="card-img"><img src="../images/shop/drob.png" alt=""></div>
                             <h3>Дробь</h3>
                             <p>1.200p</p>
-                            <button class="add glow-btn" onclick="addToCart('Дробь', 1200, '../images/shop/drob.png')">
+                            <button class="add glow-btn" onclick="addToCart('Дробь', 1200, '../images/shop/drob.png', 6)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -355,7 +355,7 @@
                             <div class="card-img"><img src="../images/shop/snipe.png" alt=""></div>
                             <h3>Снайперский калибр</h3>
                             <p>5.000p</p>
-                            <button class="add glow-btn" onclick="addToCart('Снайперский калибр', 5000, '../images/shop/snipe.png')">
+                            <button class="add glow-btn" onclick="addToCart('Снайперский калибр', 5000, '../images/shop/snipe.png', 6)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -369,7 +369,7 @@
                             <div class="card-img"><img src="../images/shop/shopNew/moduli/flashlight.png" alt=""></div>
                             <h3>Фонарик</h3>
                             <p>7.500p</p>
-                            <button class="add glow-btn" onclick="addToCart('Фонарик', 7500, '../images/shop/shopNew/moduli/flashlight.png')">
+                            <button class="add glow-btn" onclick="addToCart('Фонарик', 7500, '../images/shop/shopNew/moduli/flashlight.png', 5)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -377,7 +377,7 @@
                             <div class="card-img"><img src="../images/shop/shopNew/moduli/holoscope.png" alt=""></div>
                             <h3>Прицел</h3>
                             <p>7.000p</p>
-                            <button class="add glow-btn" onclick="addToCart('Прицел', 7000, '../images/shop/shopNew/moduli/holoscope.png')">
+                            <button class="add glow-btn" onclick="addToCart('Прицел', 7000, '../images/shop/shopNew/moduli/holoscope.png', 5)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                                 </div>
@@ -385,7 +385,7 @@
                             <div class="card-img"><img src="../images/shop/shopNew/moduli/grip.png" alt=""></div>
                             <h3>Рукоять</h3>
                             <p>6.800p</p>
-                            <button class="add glow-btn" onclick="addToCart('Рукоять', 6800, '../images/shop/shopNew/moduli/grip.png')">
+                            <button class="add glow-btn" onclick="addToCart('Рукоять', 6800, '../images/shop/shopNew/moduli/grip.png', 5)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -393,7 +393,7 @@
                             <div class="card-img"><img src="../images/shop/shopNew/moduli/bipods.png" alt=""></div>
                             <h3>Сошки</h3>
                             <p>9.000p</p>
-                            <button class="add glow-btn" onclick="addToCart('Сошки', 9000, '../images/shop/shopNew/moduli/bipods.png')">
+                            <button class="add glow-btn" onclick="addToCart('Сошки', 9000, '../images/shop/shopNew/moduli/bipods.png', 5)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
@@ -401,7 +401,7 @@
                             <div class="card-img"><img src="../images/shop/bron.png" alt=""></div>
                             <h3>Бронежилет</h3>
                             <p>12.000p</p>
-                            <button class="add glow-btn" onclick="addToCart('Бронежилет', 12000, '../images/shop/bron.png')">
+                            <button class="add glow-btn" onclick="addToCart('Бронежилет', 12000, '../images/shop/bron.png', 3)">
                                <img src="../images/shop/Cart.png" alt="">В корзину
                                 </button>
                         </div>
