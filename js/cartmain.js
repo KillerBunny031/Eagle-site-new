@@ -1,14 +1,15 @@
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
     const CART_LIMITS = {
-    maxSameItem: 5
+    maxTotalItems: 8,
+    defaultMaxSameItem: 2
 };
 function checkCooldown() {
     const lastOrderTime = localStorage.getItem('lastOrderTime');
     if (!lastOrderTime) return { allowed: true, remaining: 0 }; 
     
     const now = Date.now();
-    const cooldownTime = 30 * 60 * 1000; 
+    const cooldownTime = 0 * 60 * 1000; 
     const timeSinceLastOrder = now - parseInt(lastOrderTime);
     
     if (timeSinceLastOrder < cooldownTime) {
@@ -72,13 +73,19 @@ async function sendOrderToDiscord(discordUsername, cartItems, totalAmount) {
 }
 
 
-function addToCart(productName, productPrice, productImage = '') {
+function addToCart(productName, productPrice, productImage = '', maxPerItem = CART_LIMITS.defaultMaxSameItem) {
     const existingItem = cart.find(item => item.name === productName);
-
+    
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (totalItems >= CART_LIMITS.maxTotalItems) {
+        showNotification(`Максимум 8 товаров, не путай`, true);
+        return;
+    }
+    
     if (existingItem) {
-        
-        if (existingItem.quantity >= CART_LIMITS.maxSameItem) {
-            showNotification(`Достигнут лимит в ${CART_LIMITS.maxSameItem} одного товара`, true);
+        const itemLimit = existingItem.maxPerItem || maxPerItem;
+        if (existingItem.quantity >= itemLimit) {
+            showNotification(`У этого товара лимит...`, true);
             return;
         }
         existingItem.quantity += 1;
@@ -87,13 +94,14 @@ function addToCart(productName, productPrice, productImage = '') {
             name: productName,
             price: productPrice,
             image: productImage,
-            quantity: 1
+            quantity: 1,
+            maxPerItem: maxPerItem 
         });
     }
     
     updateCartSidebar();
     saveCartToStorage();
-    showNotification(`${productName} добавлен в корзину`);
+    showNotification(`${productName} добавлен в корзину!`);
 }
 
 
@@ -169,26 +177,32 @@ cart.forEach((item, index) => {
 
 
 function changeQuantity(index, change) {
-    const currentItem = cart[index];
+    const item = cart[index];
+    const futureQuantity = item.quantity + change;
     
-    if (change > 0) {
-        const newQuantity = currentItem.quantity + change;
-        
-        if (newQuantity > CART_LIMITS.maxSameItem) {
-            showNotification(`Достигнут лимит в ${CART_LIMITS.maxSameItem} одного товара`, true);
-            return;
-        }
-        
-        currentItem.quantity = newQuantity;
-        
-    } else { 
-        
-        currentItem.quantity += change;
-        
-        if (currentItem.quantity <= 0) {
+    if (change < 0) {
+        item.quantity = futureQuantity;
+        if (item.quantity <= 0) {
             cart.splice(index, 1);
         }
+        updateCartSidebar();
+        saveCartToStorage();
+        return;
     }
+    
+    const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+    if (totalItems >= CART_LIMITS.maxTotalItems) {
+        showNotification(`Максимум 8 товаров, не путай`, true);
+        return;
+    }
+    
+    const itemLimit = item.maxPerItem || CART_LIMITS.defaultMaxSameItem;
+    if (futureQuantity > itemLimit) {
+        showNotification(`У этого товара лимит...`, true);
+        return;
+    }
+    
+    item.quantity = futureQuantity;
     
     updateCartSidebar();
     saveCartToStorage();
